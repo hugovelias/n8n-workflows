@@ -1,0 +1,598 @@
+{
+  "name": "appointment-manager-update-slots",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Checks if required info (email, name, start time) is provided.",
+        "height": 80,
+        "width": 230
+      },
+      "id": "146d7d3d-0908-40b8-99ee-dcfadc09f6f0",
+      "name": "Sticky Note CancelSlot Check",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1152,
+        576
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Finds the appointment record in Airtable by phone number to get event ID.",
+        "height": 100,
+        "width": 190
+      },
+      "id": "c057abee-d51f-4ce5-a99d-fb3294262b0d",
+      "name": "Sticky Note CancelSlot Search",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -816,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Deletes the event from Google Calendar using event ID.",
+        "height": 80,
+        "width": 190
+      },
+      "id": "c0844254-3c07-4b3e-aab2-1bef99cd383d",
+      "name": "Sticky Note CancelSlot GCal Delete",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -528,
+        512
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Updates Airtable record status to 'Canceled'.",
+        "height": 80,
+        "width": 190
+      },
+      "id": "c50e35b1-580b-401e-89e2-f707f4247406",
+      "name": "Sticky Note CancelSlot Airtable Update",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -192,
+        192
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "836e9321-d677-43ff-98d1-a8cff6f32bf4",
+              "leftValue": "={{ $json.callerNumber }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "fdc6ffb0-f234-4869-8f5e-482c394ab860",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.email }}",
+              "rightValue": ""
+            },
+            {
+              "id": "c0b869e4-9490-4c01-b138-835bb34eb1ba",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.oldStartTime }}",
+              "rightValue": ""
+            },
+            {
+              "id": "872f7925-972f-4132-93a0-aa76ec619151",
+              "leftValue": "={{ $json.newStartTime }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "219a469f-99ad-481b-af83-26ad86331da7",
+      "name": "Checks if required info is provided for cancelation",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -1088,
+        416
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app6V9RxLcHB4jvkA",
+          "mode": "list",
+          "cachedResultName": "Voice Receptionist Agent",
+          "cachedResultUrl": "https://airtable.com/app6V9RxLcHB4jvkA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblF8LF9lmkHMbk7v",
+          "mode": "list",
+          "cachedResultName": "Appointments",
+          "cachedResultUrl": "https://airtable.com/app6V9RxLcHB4jvkA/tblF8LF9lmkHMbk7v"
+        },
+        "filterByFormula": "=AND(\n{starttime} = DATETIME_PARSE(\"{{ $json.oldStartTime }}\"),\n{Phone Number} = (\"{{ $json.callerNumber }}\"),\n{Email} = (\"{{ $json.email }}\")\n)",
+        "options": {
+          "fields": [
+            "Email",
+            "Name",
+            "starttime",
+            "eventId"
+          ]
+        }
+      },
+      "id": "eb96d527-98a6-41d0-920b-598534e8a49c",
+      "name": "Finds the appointment record",
+      "type": "n8n-nodes-base.airtable",
+      "position": [
+        -816,
+        352
+      ],
+      "typeVersion": 2.1,
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "QXLxGuYPPsyfhT1h",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "app6V9RxLcHB4jvkA",
+          "mode": "list",
+          "cachedResultName": "Voice Receptionist Agent",
+          "cachedResultUrl": "https://airtable.com/app6V9RxLcHB4jvkA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblF8LF9lmkHMbk7v",
+          "mode": "list",
+          "cachedResultName": "Appointments",
+          "cachedResultUrl": "https://airtable.com/app6V9RxLcHB4jvkA/tblF8LF9lmkHMbk7v"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "eventId": "={{ $('Finds the appointment record').item.json.eventId }}",
+            "Booking Status": "updated",
+            "starttime": "={{ $json.start.dateTime }}",
+            "endtime": "={{ $json.end.dateTime }}"
+          },
+          "matchingColumns": [
+            "eventId"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Booking Status",
+              "displayName": "Booking Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CallRecordingId",
+              "displayName": "CallRecordingId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "starttime",
+              "displayName": "starttime",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "endtime",
+              "displayName": "endtime",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "meetlink",
+              "displayName": "meetlink",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "meetdescription",
+              "displayName": "meetdescription",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Voice Agent",
+              "displayName": "Voice Agent",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "eventId",
+              "displayName": "eventId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Appointments",
+              "displayName": "Appointments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "68955ed4-acff-4453-bd14-e472f5fa4bac",
+      "name": "Update Airtable record",
+      "type": "n8n-nodes-base.airtable",
+      "position": [
+        -320,
+        240
+      ],
+      "typeVersion": 2.1,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "QXLxGuYPPsyfhT1h",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "oldStartTime"
+            },
+            {
+              "name": "timeZone"
+            },
+            {
+              "name": "callId"
+            },
+            {
+              "name": "callerNumber"
+            },
+            {
+              "name": "timeZone"
+            },
+            {
+              "name": "email"
+            },
+            {
+              "name": "oldEndTime"
+            },
+            {
+              "name": "newStartTime"
+            },
+            {
+              "name": "newEndTime"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1360,
+        416
+      ],
+      "id": "fcee8a05-c605-403e-baf9-7024110044d8",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "c0d34fn@gmail.com",
+          "mode": "list",
+          "cachedResultName": "Gmail"
+        },
+        "eventId": "={{ $json.eventId }}",
+        "updateFields": {
+          "end": "={{ $('Checks if required info is provided for cancelation').item.json.newEndTime }}",
+          "start": "={{ $('Checks if required info is provided for cancelation').item.json.newStartTime }}"
+        }
+      },
+      "id": "d1582d73-fdcc-4e21-bda9-23af6ddcd951",
+      "name": "Update Event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "position": [
+        -528,
+        352
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "v8he0NUEHxJLmkeE",
+          "name": "Google Calendar account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"callId\": \"{{ $('When Executed by Another Workflow').item.json.callId }}\",\n\"callerNumber\":\"{{ $('When Executed by Another Workflow').item.json.callerNumber }}\",\n  \"status\": \"error\",\n  \"message\": \"information incomplete\"\n}",
+        "options": {}
+      },
+      "id": "403aa437-c597-47ee-a2db-6d77e1176d75",
+      "name": "Information Incomplete",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -816,
+        576
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"callId\": \"{{ $('When Executed by Another Workflow').item.json.callId }}\",\n\"callerNumber\":\"{{ $('When Executed by Another Workflow').item.json.callerNumber }}\",\n  \"status\": \"error\",\n  \"message\": \"appointment was not updated\"\n}",
+        "options": {}
+      },
+      "id": "54127578-75ce-4d51-a4c0-4e6044cebc8f",
+      "name": "Update Event Failed",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -320,
+        528
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"callId\": \"{{ $('When Executed by Another Workflow').item.json.callId }}\",\n\"callerNumber\":\"{{ $('When Executed by Another Workflow').item.json.callerNumber }}\",\n  \"status\": \"success\",\n  \"message\": \"appointment has been updated\"\n}",
+        "options": {}
+      },
+      "id": "33cd23fa-0e20-4805-811d-1cffd1133195",
+      "name": "Updated Record",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -96,
+        368
+      ],
+      "typeVersion": 3.4
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "oldStartTime": "2025-07-25T18:00:00-06:00",
+          "oldEndTime": "2025-07-25T19:00:00-06:00",
+          "newStartTime": "2025-07-25T15:00:00-06:00",
+          "newEndTime": "2025-07-25T16:00:00-06:00",
+          "timeZone": "America/Mexico_City",
+          "callId": "call_gWvk3cUDGWT98wkEBmgsDBi7",
+          "callerNumber": "(561) 756-5010",
+          "email": "solidussnack@hotmail.com"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Checks if required info is provided for cancelation": {
+      "main": [
+        [
+          {
+            "node": "Finds the appointment record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Information Incomplete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finds the appointment record": {
+      "main": [
+        [
+          {
+            "node": "Update Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Airtable record": {
+      "main": [
+        [
+          {
+            "node": "Updated Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Checks if required info is provided for cancelation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Event": {
+      "main": [
+        [
+          {
+            "node": "Update Airtable record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Event Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Incomplete": {
+      "main": [
+        []
+      ]
+    },
+    "Updated Record": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "68df7aa0-9e1e-4331-a014-975271e03bcd",
+  "meta": {
+    "instanceId": "9a8aba533b403b88b82ddc10eaf24a3b9ea4720731ee62282249273ac35c2a6f"
+  },
+  "id": "3PS97Qjs7ocKkogS",
+  "tags": [
+    {
+      "createdAt": "2025-07-07T20:34:51.228Z",
+      "updatedAt": "2025-07-07T20:34:51.228Z",
+      "id": "DpoWFufyir7Xw37U",
+      "name": "production"
+    }
+  ]
+}

@@ -1,0 +1,670 @@
+{
+  "name": "appointment-manager-whatsapp",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        208
+      ],
+      "id": "2913bd0d-14a9-4135-942e-0427b57eeff5",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "CV3iwE7GQESySsvX",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.data.from }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "11cddded-4585-43f1-87eb-81db40a8ff91",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fIFKCCmMEkTH9MAt",
+          "mode": "list",
+          "cachedResultName": "appointment-manager-get-slots"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "startTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('startTime', ``, 'string') }}",
+            "endTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('endTime', ``, 'string') }}",
+            "timeZone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('timeZone', ``, 'string') }}",
+            "callId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('callId', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "startTime",
+              "displayName": "startTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "endTime",
+              "displayName": "endTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timeZone",
+              "displayName": "timeZone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "callId",
+              "displayName": "callId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        208
+      ],
+      "id": "59bb46e1-5e42-4e88-93da-4126b647dc58",
+      "name": "GetSlots"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "D8WAocSADFuZ4FGU",
+          "mode": "list",
+          "cachedResultName": "appointment-manager-book-slots"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "startTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('startTime', ``, 'string') }}",
+            "endTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('endTime', ``, 'string') }}",
+            "timeZone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('timeZone', ``, 'string') }}",
+            "callId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('callId', ``, 'string') }}",
+            "callerNumber": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('callerNumber', ``, 'string') }}",
+            "notes": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('notes', ``, 'string') }}",
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "startTime",
+              "displayName": "startTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "endTime",
+              "displayName": "endTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timeZone",
+              "displayName": "timeZone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "callId",
+              "displayName": "callId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "callerNumber",
+              "displayName": "callerNumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        208
+      ],
+      "id": "7a89fd0e-5816-4f54-8ff3-fb2565687618",
+      "name": "BookSlots"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "v9FSQwMsDYIJ65ot",
+          "mode": "list",
+          "cachedResultName": "appointment-manager-cancel-slots"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "startTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('startTime', ``, 'string') }}",
+            "timeZone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('timeZone', ``, 'string') }}",
+            "callId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('callId', ``, 'string') }}",
+            "callerNumber": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('callerNumber', ``, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "startTime",
+              "displayName": "startTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timeZone",
+              "displayName": "timeZone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "callId",
+              "displayName": "callId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "callerNumber",
+              "displayName": "callerNumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timeZone",
+              "displayName": "timeZone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        208
+      ],
+      "id": "9c08c218-4a5e-41f0-bf66-271d30e04d42",
+      "name": "CancelSlots"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=# Contexto\nEres un asistente que ayuda a gestionar las citas de nuestros pacientes (clientes) para Dentibelle Salud y Belleza Dental, clínica dental ubicada en Pachuca, Hidalgo, México, la fecha y hora actual: {{ $now }}\n\n# Estilo\n\n- Usa lenguaje formal pero amable y calido para crear una experiencia comoda y amigable.\n- Mantén las respuestas breves y concisas, refleja un estilo de conversación natural.\n- Limita las respuestas a la información esencial, dividiendo los datos en partes pequeñas cuando sea posible.\n- Si te piden hablar con una persona, pideles que marquen directamente al numero.\n- La duracion de las citas es de 60 minutos por defecto, calcula endTime con esta regla.\n\n# Reglas\n- No te saltes ningun paso de las Tareas.\n- Usa tu base de conocimientos para acceder a más información sobre el negocio.\n- No agendes llamadas los domingos ni días festivos (siempre usa GetSlots).\n- Deberas generar los datos como fechas o numeros de telefono en los formatos de la herramienta, no pidas al cliente que te los de el.\n- Si te dan fechas incompletas como dia y hora, asume que es el proximo dia de la semana en el calendario, no pidas mes y año a menos que el cliente lo especifique.\n- Solo continua si tienes todos los datos correctos.\n- Al iniciar una nueva conversacion menciona que nuestros horarios de operacion son de Lunes a Viernes, de 9 am a 6 pm y Sabados de 11 am a 3 pm, Emergencias, 24/7 si es necesario.\n\n\n# Tareas\n1. **Checar Disponibilidad**  \n   - No cheques citas en el pasado, si lo intentan, haz una broma amigable.\n   - Pasos:\n     1. Recolecta nombre, inicio de cita y motivo. NO CONTINÚES sin estos tres datos.\n     2. Si tienes `startTime`, genera `endTime` agregando 60 minutos, llama a `GetSlots`.\n     3. Si no hay disponibilidad, informa al cliente y sugiere otro horario segun los datos de la herramienta.\n     4. Si hay disponibilidad informa al cliente y pregunta si desea agendar la cita.\n\n2. **Agendar Citas**  \n   - No programes citas en el pasado. Si lo intentan, haz una broma amigable.\n   - Pasos:\n     1. Solicita el numero de telefono a 10 digitos (callerNumber) y correo electronico (email).\n     2. Si tienes el nombre (name) y motivo de la cita (notes), Fecha-Hora de inicio (startTime) y Fecha-Hora de fin (endTime) usa la herramienta BookSlots.\n     3. Si no hay disponibilidad, informa al cliente y sugiere llamar despues.\n     4. Usa `BookSlots` solo cuando tengas todo confirmado. \n     5. Confirma la cita con la respuesta de la herramienta.\n\n3. **Actualizar Citas**  \n   - Si desean reprogramar:\n     1. Recolecta correo (email), numero telefonico (callerNumber), hora original (oldStartTime) y nueva hora (newStartTime).\n     2. Llama a `GetSlots` con la nueva hora como `startTime` y `endTime` para verificar disponibilidad.\n     3. Si no hay disponibilidad en ese horario, infórmalo y pide una nueva hora.\n     4. Si hay disponibilidad, usa `UpdateSlots` con los datos requeridos.\n     5. Confirma el cambio con la respuesta de la herramienta.\n\n4. **Cancelar Citas**  \n   - Si desean cancelar:\n     1. Solicita el numero de telefono a 10 digitos (callerNumber) y correo electronico (email), no es necesario el nombre o motivo.\n     2. Solicita la fecha y hora de inicio de la cita (startTime).\n     3. Llama a `CancelSlots` cuando tengas los datos.\n     4. Confirma con la respuesta de la herramienta.\n\n[Herramientas]\n\n1. **GetSlots (Buscar Disponibilidad)**  \n   - **Propósito**: Revisar horarios disponibles cuando se conozcan las fechas de inicio y fin.\n   - **Parámetros**:\n     - `startTime`: Hora de inicio en formato ISO 8601 (ej. `\"2023-04-25T15:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `endTime`: Hora de inicio en formato ISO 8601 (ej. `\"2023-04-25T15:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `callId`: Id de Session, usa el valor = {{ $json.sessionId }}\n     - `timeZone`: Zona horarioa, usa el valor = \"America/Mexico_City\"\n\n2. **BookSlots (Reservar Citas)**  \n   - **Propósito**: Agendar una cita cuando tengas todos los datos requeridos.\n   - **Parámetros requeridos**:\n     - `name`: Nombre del paciente (no inventes ni uses titulos).\n     - `email`: Email del paciente.\n     - `callerNumber`: Numero telefonico en formato NANP (ej. `\"(561) 756-5010\"`)\n     - `startTime`: Hora de inicio en formato ISO 8601 (ej. `\"2023-04-25T15:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `endTime`: Hora de inicio en formato ISO 8601 (ej. `\"2023-04-25T15:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `notes`: Razon por la que se solicita una cita.\n     - `callId`: Id de Session, usa el valor = {{ $json.sessionId }}\n     - `timeZone`: Zona horarioa, usa el valor = \"America/Mexico_City\"\n\n3. **CancelSlots (Cancelar Citas)**  \n   - **Propósito**: Cancelar una cita cuando se tengan los detalles completos.\n   - **Parámetros**:\n     - `email`: Email del paciente.\n     - `callerNumber`: Numero telefonico en formato NANP (ej. `\"(561) 756-5010\"`)\n     - `startTime`: Hora de inicio en formato ISO 8601 (ej. `\"2023-04-25T15:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `callId`: Id de Session, usa el valor = {{ $json.sessionId }}\n     - `timeZone`: Zona horarioa, usa el valor = \"America/Mexico_City\"\n\n4. **UpdateSlots (Actualizar Citas)**  \n   - **Propósito**: Actualizar una cita cuando se tengan los detalles completos.\n   - **Parámetros**:\n     - `email`: Email del paciente.\n     - `callerNumber`: Numero telefonico en formato NANP (ej. `\"(561) 756-5010\"`)\n     - `oldStartTime`: Vieja hora de inicio en formato ISO 8601 (ej. `\"2023-04-25T15:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `oldEndTime`: Vieja hora de fin en formato ISO 8601 (ej. `\"2023-04-25T15:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `newStartTime`: Nueva hora de inicio en formato ISO 8601 (ej. `\"2023-04-25T18:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `newEndTime`: Nueva hora de fin en formato ISO 8601 (ej. `\"2023-04-25T19:00:00-06:00\"`) en zona horaria America/Mexico_City.\n     - `callId`: Id de Session, usa el valor = {{ $json.sessionId }}\n     - `timeZone`: Zona horarioa, usa el valor = \"America/Mexico_City\"     \n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        272,
+        0
+      ],
+      "id": "75872dc3-9933-4e1d-ba0f-00b7a101f0c1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PS97Qjs7ocKkogS",
+          "mode": "list",
+          "cachedResultName": "appointment-manager-update-slots"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "oldStartTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('oldStartTime', ``, 'string') }}",
+            "timeZone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('timeZone', ``, 'string') }}",
+            "callId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('callId', ``, 'string') }}",
+            "callerNumber": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('callerNumber', ``, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', ``, 'string') }}",
+            "oldEndTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('oldEndTime', ``, 'string') }}",
+            "newStartTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('newStartTime', ``, 'string') }}",
+            "newEndTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('newEndTime', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "oldStartTime",
+              "displayName": "oldStartTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "timeZone",
+              "displayName": "timeZone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "callId",
+              "displayName": "callId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "callerNumber",
+              "displayName": "callerNumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "timeZone",
+              "displayName": "timeZone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "oldEndTime",
+              "displayName": "oldEndTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "newStartTime",
+              "displayName": "newStartTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "newEndTime",
+              "displayName": "newEndTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        208
+      ],
+      "id": "cb3f1bc5-14f7-4ab3-bffa-fc27efbd14c7",
+      "name": "UpdateSlots"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "appointment-manager-whatsapp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "b5918c73-b246-471d-9113-4cc980e591b1",
+      "name": "WA-UltraMSG (input)",
+      "webhookId": "d33bb350-fa7b-4407-abe6-39511e63f48e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8d81d799-18cf-4eed-a190-4dcda11712c7",
+              "leftValue": "={{ $json.body.data.isForwarded }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f658cefa-2f9c-4d53-b9dc-6ca242cd819a",
+              "leftValue": "={{ $json.body.data.self }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        48,
+        0
+      ],
+      "id": "fd782670-de0c-478c-bde3-0b16a3796694",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.ultramsg.com/instance{{ $('WA-UltraMSG (input)').item.json.body.instanceId }}/messages/chat",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "content-type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "=kf71yk9rhflvw0d9"
+            },
+            {
+              "name": "to",
+              "value": "={{ $('WA-UltraMSG (input)').item.json.body.data.from.replace('@c.us','') }}"
+            },
+            {
+              "name": "body",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "f81fb325-a6ec-484a-969e-fd52cce600f1",
+      "name": "WA-UltraMSG (output)"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetSlots": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BookSlots": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CancelSlots": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UpdateSlots": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "WA-UltraMSG (output)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WA-UltraMSG (input)": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 3600,
+    "errorWorkflow": "34mBkuaViOgDpwqQ"
+  },
+  "versionId": "a5b9f3c7-13d8-41cd-b1c1-86a650d2de72",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9a8aba533b403b88b82ddc10eaf24a3b9ea4720731ee62282249273ac35c2a6f"
+  },
+  "id": "1aUqoHKsNzHxXhTd",
+  "tags": [
+    {
+      "createdAt": "2025-07-07T20:34:51.228Z",
+      "updatedAt": "2025-07-07T20:34:51.228Z",
+      "id": "DpoWFufyir7Xw37U",
+      "name": "production"
+    }
+  ]
+}

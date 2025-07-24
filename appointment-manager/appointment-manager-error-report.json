@@ -1,0 +1,189 @@
+{
+  "name": "appointment-manager-error-report",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "79392cf9-7da7-41e4-8fd7-f4613d1b8e5e",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app6V9RxLcHB4jvkA",
+          "mode": "list",
+          "cachedResultName": "Voice Receptionist Agent",
+          "cachedResultUrl": "https://airtable.com/app6V9RxLcHB4jvkA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblH9f115GL8i1rvF",
+          "mode": "list",
+          "cachedResultName": "Errors",
+          "cachedResultUrl": "https://airtable.com/app6V9RxLcHB4jvkA/tblH9f115GL8i1rvF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.execution.id }}",
+            "RAW": "={{ $json.execution.toJsonString() }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "RAW",
+              "displayName": "RAW",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Created time",
+              "displayName": "Created time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -32,
+        -32
+      ],
+      "id": "aa6d3f46-416e-48b6-b50a-6c48d40318d8",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "QXLxGuYPPsyfhT1h",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "contacto@dentibelle.mx",
+        "toEmail": "c0d34fn@gmail.com",
+        "subject": "error: app.dentibelle.mx",
+        "emailFormat": "text",
+        "text": "=There has been an error with id:{{ $json.fields.ID }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        176,
+        -32
+      ],
+      "id": "c8e65f14-779f-43a4-9c94-c5e16a907f78",
+      "name": "Send email",
+      "webhookId": "cbe95d10-84d3-4843-a1e0-aff8ad627f1f",
+      "credentials": {
+        "smtp": {
+          "id": "E1CCP7vD4SwCHTb9",
+          "name": "Titan SMTP (mail)"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Error Trigger": [
+      {
+        "json": {
+          "execution": {
+            "id": 231,
+            "url": "https://n8n-7ohc.onrender.com/execution/workflow/1/231",
+            "retryOf": "34",
+            "error": {
+              "message": "Example Error Message",
+              "stack": "Stacktrace"
+            },
+            "lastNodeExecuted": "Node With Error",
+            "mode": "manual"
+          },
+          "workflow": {
+            "id": "1",
+            "name": "Example Workflow"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "68262b24-94b8-4154-8dc3-04661e6b1c9e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9a8aba533b403b88b82ddc10eaf24a3b9ea4720731ee62282249273ac35c2a6f"
+  },
+  "id": "34mBkuaViOgDpwqQ",
+  "tags": []
+}
